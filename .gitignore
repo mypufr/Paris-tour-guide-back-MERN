@@ -1,0 +1,49 @@
+# Node.js 相關
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# 環境變數檔案（存 API 密鑰等敏感資訊）
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# 編譯輸出（避免上傳打包後的檔案）
+dist/
+build/
+
+# 靜態檔案快取
+.cache/
+.vite/
+.next/
+out/
+
+# 日誌檔案
+logs/
+*.log
+logs/**/*.log
+debug.log
+debug/
+
+# VS Code 編輯器設定
+.vscode/
+*.code-workspace
+
+# MacOS 系統檔案
+.DS_Store
+
+# Linux 系統檔案
+*.swp
+*.swo
+
+# Windows 系統檔案
+Thumbs.db
+desktop.ini
+
+# 圖片處理快取
+public/static/
