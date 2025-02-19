@@ -1,8 +1,8 @@
 import express from "express";
-const router = express.Router();
 import cors from "cors";
 import { test, registerUser, loginUser, getProfile, logoutUser, editProfile } from "../controllers/authController.js";
 
+const router = express.Router();
 
 router.use(
   cors({

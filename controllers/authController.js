@@ -66,7 +66,14 @@ export const loginUser = async (req, res) => {
             .json(user);
         }
       );
-      return res.json("配對成功", token);
+      return res.status(200).json({
+        message: "配對成功",
+        user: {
+          email: user.email,
+          id: user._id,
+          username: user.username,
+        },
+      });
     }
 
     if (!passwordMatch) {
@@ -103,10 +110,46 @@ export const logoutUser = (req, res) => {
 };
 
 // Edit Profile Endpint
-export const editProfile = (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ error: "請求 body 為空，請確認前端是否正確傳遞資料" });
+export const editProfile = async (req, res) => {
+  try {
+    console.log("收到的請求資料:", req.body); // 確保前端有傳來資料
+    const { email, username, name, tel, isTourist, isGuide } = req.body;
+
+    if (!email || !username || !name) {
+      return res
+        .status(400)
+        .json({ error: "缺少必要欄位: email, username, name" });
+    }
+
+    const convertedIsTourist = isTourist === "on" ? true : false;
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email }, // 根據 email 找到使用者
+      { username, name, tel, isTourist:convertedIsTourist, isGuide }, // 更新欄位
+      { new: true, runValidators: true } // 回傳更新後的資料
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "使用者不存在" });
+    }
+
+    res.status(200).json({ message: "編輯成功", user: updatedUser });
+
+    // 建立新使用者
+    // const newUser = new User({
+    //   username: req.body.username,
+    //   name: req.body.name,
+    //   email: req.body.email,
+    //   tel: req.body.tel,
+    //   isTourist: isTourist,
+    //   isGuide: req.body.isGuide,
+    // });
+
+    // 將資料存入 MongoDB
+    // await newUser.save();
+    // res.status(200).json({ message: "使用者資料已成功儲存", data: newUser });
+  } catch (error) {
+    console.error("❌ 儲存使用者資料失敗:", error);
+    res.status(500).json({ error: "伺服器錯誤，請稍後再試" });
   }
-  console.log("收到的請求資料:", req.body)
-  res.status(200).json({message:"edit profile ok", data: req.body} )
-} 
+};

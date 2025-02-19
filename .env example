@@ -1,3 +1,6 @@
 
 MONGO_URL =MONGODB_PASSWORD
 JWT_SECRET =JWT_PASSWORD 
+
+MONGO_URL = mongodb+srv://mypufr:riVcsnfPzFbk8qDc@cluster0.ou6km.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET = 5412354465
