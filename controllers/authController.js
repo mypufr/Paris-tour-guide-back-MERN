@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import Tourguide from "../models/tourguideProfile.js";
 import { hashPassword, comparePassword } from "../helpers/auth.js";
 import jwt from "jsonwebtoken";
 
@@ -153,3 +154,13 @@ export const editProfile = async (req, res) => {
     res.status(500).json({ error: "伺服器錯誤，請稍後再試" });
   }
 };
+
+
+export const getTourguideProfile = async(req, res) => {
+  try {
+    const tourguides = await Tourguide.find();
+    res.json(tourguides);
+  } catch (error) {
+    res.status(500).json({ message: "伺服器錯誤", error })
+  }
+}
