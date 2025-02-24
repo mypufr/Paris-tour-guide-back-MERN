@@ -29,7 +29,7 @@ app.use(cookieParser())
 // Parse or decode data that has been submitted using the URL-encoded format within an HTTP request.
 app.use(express.urlencoded({extended: false}))
 
-app.use("/", authRoutes)
+app.use("/api", authRoutes)
 
  
 // app.use(router);

@@ -1,7 +1,11 @@
 import User from "../models/user.js";
 import Tourguide from "../models/tourguideProfile.js";
+import Commentaries from "../models/commentaries.js";
+import TourguideInfo from "../models/tourguideInfo.js";
+import Trips from "../models/trips.js"
 import { hashPassword, comparePassword } from "../helpers/auth.js";
 import jwt from "jsonwebtoken";
+
 
 export const test = (req, res) => {
   res.json("test is working");
@@ -163,4 +167,74 @@ export const getTourguideProfile = async(req, res) => {
   } catch (error) {
     res.status(500).json({ message: "伺服器錯誤", error })
   }
+}
+
+export const getCommentaries = async(req, res) => {
+  try {
+    
+    const commentaries = await Commentaries.find();
+    res.json(commentaries);
+  } catch (error) {
+    res.status(500).json({ message: "伺服器錯誤", error })
+  }
+}
+
+export const getTourguideInfo= async(req, res) => {
+  try {
+    
+    // const tourguideInfo = await TourguideInfo.findOne( {id:1} );
+
+     const tourguideInfo = await TourguideInfo.find( {} );
+    // const {id} = req.params;
+    
+    if(!tourguideInfo) {
+      return res.status(404).json({ message: "導遊資料未找到" });
+
+    }
+    // res.json(tourguideInfo.profile);
+    // console.log(tourguideInfo.profile)
+    res.status(200).json({ success: true, data: tourguideInfo });
+
+  } catch (error) {
+    res.status(500).json({ message: "伺服器錯誤", error })
+  }
+}
+
+export const getTrips = async(req, res) => {
+  try {
+    
+    const trips = await Trips.find();
+    res.json(trips);
+  } catch (error) {
+    res.status(500).json({ message: "伺服器錯誤", error })
+  }
+}
+
+export const getTourguideInfoById = async(req, res)=> {
+
+try {
+  const {id} = req.params;
+  console.log("🔍 查詢導遊 ID:", id); // 確保有拿到 id
+
+  if (!id) {
+    return res.status(400).json({ message: "請提供有效的導遊 ID" });
+  }
+
+
+  const tourguideById = await TourguideInfo.findOne( {id} );
+ 
+
+ if (!tourguideById) {
+  return res.status(404).json({ message: "導遊資料未找到", error });
+ }
+ return res.json(tourguideById);
+} catch (error) {
+  console.error("❌ 查詢導遊資料失敗:", error);
+
+  if (!res.headersSent) {
+    return res.status(500).json({ message: "伺服器錯誤", error: error.message });
+  }
+
+}
+
 }
