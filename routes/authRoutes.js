@@ -1,6 +1,11 @@
 import express from "express";
 import cors from "cors";
-import { test, registerUser, loginUser, getProfile, logoutUser, editProfile, getTourguideProfile, getCommentaries, getTourguideInfo, getTrips, getTourguideInfoById } from "../controllers/authController.js";
+import { test, registerUser, loginUser, getProfile, logoutUser, editProfile, 
+  getTourguideProfile, getCommentaries, getTourguideInfo, getTrips, getTourguideInfoById, getTours, getSites,
+
+  sendMessages
+
+} from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -25,6 +30,11 @@ router.get('/tourguideInfo', getTourguideInfo)
 
 router.get('/tourguideInfo/:id', getTourguideInfoById)
 router.get('/trips', getTrips)
+router.get('/tours', getTours)
+router.get('/sites', getSites)
+
+
+router.post('/messages', sendMessages)
             
 
 export default router;

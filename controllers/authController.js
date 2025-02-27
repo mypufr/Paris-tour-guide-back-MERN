@@ -1,8 +1,13 @@
+import mongoose from "mongoose";
 import User from "../models/user.js";
 import Tourguide from "../models/tourguideProfile.js";
 import Commentaries from "../models/commentaries.js";
 import TourguideInfo from "../models/tourguideInfo.js";
 import Trips from "../models/trips.js"
+import Tours from "../models/tours.js";
+import Sites from "../models/singleSites.js";
+import Message from "../models/Message.js";
+
 import { hashPassword, comparePassword } from "../helpers/auth.js";
 import jwt from "jsonwebtoken";
 
@@ -238,3 +243,243 @@ try {
 }
 
 }
+
+export const getTours = async(req, res) => {
+  try {
+    
+    const tours = await Tours.find();
+    res.json(tours);
+  } catch (error) {
+    res.status(500).json({ message: "伺服器錯誤", error })
+  }
+}
+
+
+export const getSites = async(req, res) => {
+  try {
+    
+    const sites = await Sites.find();
+    res.json(sites);
+  } catch (error) {
+    res.status(500).json({ message: "伺服器錯誤", error })
+  }
+}
+
+
+//   let { tourguideId, message} = req.body; 
+
+
+//   export const sendMessages = async(req, res) => {
+//   let { tourguideId, message} = req.body; 
+
+// const db = client.db()
+
+// //   if (!tourguideId || !message) {
+// //     return res.status(400).json({error: "請提供導遊 ID 和留言內容"})
+// //   }
+
+
+// // try {
+
+
+// //   if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
+// //     return res.status(400).json({ error: "無效的導遊 ID" });
+// //   }
+
+
+//   // const newMessage = new Message({tourguideId, message});
+
+
+// //   res.json({ success: true, message: "留言已儲存！" });
+
+// // } catch (error) {
+// //   console.error("留言儲存失敗", error);
+// //   res.status(500).json({ error: "伺服器錯誤", details: error.message });
+// // }
+
+// try {
+
+//   const newMessage = new Message({tourguideId, message});
+//   const res = await db.Collection('message').insertOne(newMessage)
+//   newMessage= res.insertedId;
+// } catch (error) {
+
+//   res.status(500).json({ error: "伺服器錯誤", details: error.message });
+// }
+
+
+
+// }
+
+// const db = client.db()
+
+// //   if (!tourguideId || !message) {
+// //     return res.status(400).json({error: "請提供導遊 ID 和留言內容"})
+// //   }
+
+
+// // try {
+
+
+// //   if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
+// //     return res.status(400).json({ error: "無效的導遊 ID" });
+// //   }
+
+
+//   // const newMessage = new Message({tourguideId, message});
+
+
+// //   res.json({ success: true, message: "留言已儲存！" });
+
+// // } catch (error) {
+// //   console.error("留言儲存失敗", error);
+// //   res.status(500).json({ error: "伺服器錯誤", details: error.message });
+// // }
+
+// try {
+
+//   const newMessage = new Message({tourguideId, message});
+//   const res = await db.Collection('message').insertOne(newMessage)
+//   newMessage= res.insertedId;
+// } catch (error) {
+
+//   res.status(500).json({ error: "伺服器錯誤", details: error.message });
+// }
+
+
+
+// }
+
+
+
+// export const sendMessages = async (req, res) => {
+//   let { tourguideId, message } = req.body;
+
+//   if (!tourguideId || !message) {
+//     return res.status(400).json({ error: "請提供導遊 ID 和留言內容" });
+//   }
+
+//   try {
+//     // ✅ 確保 tourguideId 是 ObjectId
+//     if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
+//       return res.status(400).json({ error: "無效的導遊 ID" });
+//     }
+
+//     // ✅ 使用 Mongoose Model 來存資料
+//     const newMessage = new Message({
+//       tourguideId: new mongoose.Types.ObjectId(tourguideId),
+//       message,
+//     });
+
+//     await newMessage.save(); // ✅ 正確儲存
+
+//     res.json({ success: true, message: "留言已儲存！" });
+
+//   } catch (error) {
+//     console.error("留言儲存失敗", error);
+//     res.status(500).json({ error: "伺服器錯誤", details: error.message });
+//   }
+// };
+
+// export const sendMessages = async (req, res) => {
+//   let { tourguideId, name, email, message } = req.body;
+
+//   if (!tourguideId || !name || !email || !message) {
+//     return res.status(400).json({ error: "請提供完整資訊" });
+//   }
+
+//   try {
+//     if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
+//       return res.status(400).json({ error: "無效的導遊 ID" });
+//     }
+
+//     // 檢查 Email 是否已存在
+//     const existingMessage = await Message.findOne({ email });
+//     if (existingMessage) {
+//       return res.status(400).json({ error: "該 Email 已經留言過" });
+//     }
+
+//     const newMessage = new Message({
+//       tourguideName: new mongooseName.(tourguideId),
+//       name,
+//       email,
+//       message,
+//     });
+
+//     await newMessage.save();
+
+//     res.json({ success: true, message: "留言已儲存！" });
+
+//   } catch (error) {
+//     console.error("留言儲存失敗", error);
+//     res.status(500).json({ error: "伺服器錯誤", details: error.message });
+//   }
+// };
+
+
+// export const sendMessages = async (req, res) => {
+//   let { tourguideName, name, email, message } = req.body;
+
+//   // 確保所有欄位都有填寫
+//   if (!tourguideName || !name || !email || !message) {
+//     return res.status(400).json({ error: "請提供完整資訊" });
+//   }
+
+//   try {
+//     // 檢查 Email 是否已經留言過
+//     const existingMessage = await Message.findOne({ email, tourguideName });
+//     if (existingMessage) {
+//       return res.status(400).json({ error: "該 Email 已經留言過此導遊" });
+//     }
+
+//     // 建立新留言
+//     const newMessage = new Message({
+//       tourguideName, // ✅ 使用導遊名字而不是 ID
+//       name,
+//       email,
+//       message,
+//     });
+
+//     // 儲存到資料庫
+//     await newMessage.save();
+
+//     res.json({ success: true, message: "留言已儲存！" });
+
+//   } catch (error) {
+//     console.error("留言儲存失敗", error);
+//     res.status(500).json({ error: "伺服器錯誤", details: error.message });
+//   }
+// };
+
+export const sendMessages = async (req, res) => {
+  let { tourguideName, senderName, email, message } = req.body;
+
+  if (!tourguideName || !senderName || !email || !message) {
+    return res.status(400).json({ error: "請提供完整資訊" });
+  }
+
+  try {
+    let existingMessage = await Message.findOne({ email });
+
+    if (existingMessage) {
+      // ✅ 如果 Email 存在，新增一條留言到 messages 陣列
+      existingMessage.messages.push({ text: message });
+      await existingMessage.save();
+      return res.json({ success: true, message: "留言已新增！" });
+    } else {
+      // ✅ 如果 Email 不存在，建立新的留言紀錄
+      const newMessage = new Message({
+        tourguideName,
+        senderName,
+        email,
+        messages: [{ text: message }],
+      });
+      await newMessage.save();
+      return res.json({ success: true, message: "留言已儲存！" });
+    }
+
+  } catch (error) {
+    console.error("留言儲存失敗", error);
+    res.status(500).json({ error: "伺服器錯誤", details: error.message });
+  }
+};
