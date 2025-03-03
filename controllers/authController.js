@@ -1,22 +1,55 @@
 import mongoose from "mongoose";
 import User from "../models/user.js";
+
+import Newuser from "../models/Newuser.js";
+
 import Tourguide from "../models/tourguideProfile.js";
 import Commentaries from "../models/commentaries.js";
 import TourguideInfo from "../models/tourguideInfo.js";
-import Trips from "../models/trips.js"
+import Trips from "../models/trips.js";
 import Tours from "../models/tours.js";
 import Sites from "../models/singleSites.js";
 import Message from "../models/Message.js";
+import PrivateOrders from "../models/PrivateOrder.js";
 
 import { hashPassword, comparePassword } from "../helpers/auth.js";
 import jwt from "jsonwebtoken";
-
 
 export const test = (req, res) => {
   res.json("test is working");
 };
 
 // Signup Endpoint
+// export const registerUser = async (req, res) => {
+//   try {
+//     const { username, email, password } = req.body;
+
+//     if (!email) {
+//       return res.json("請輸入有效的帳號");
+//     }
+
+//     const exist = await User.findOne({ email });
+//     if (exist) {
+//       return res.json("此帳號已存在");
+//     }
+
+//     if (!password || password.length < 8) {
+//       return res.json({ error: "請輸入包含8個字母或數字的有效密碼" });
+//     }
+
+//     const hashedPassword = await hashPassword(password);
+
+//     const user = await User.create({
+//       username,
+//       email,
+//       password: hashedPassword,
+//     });
+//     return res.json(user);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 export const registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -25,7 +58,7 @@ export const registerUser = async (req, res) => {
       return res.json("請輸入有效的帳號");
     }
 
-    const exist = await User.findOne({ email });
+    const exist = await Newuser.findOne({ email });
     if (exist) {
       return res.json("此帳號已存在");
     }
@@ -36,12 +69,12 @@ export const registerUser = async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const user = await User.create({
+    const newUser = await Newuser.create({
       username,
       email,
       password: hashedPassword,
     });
-    return res.json(user);
+    return res.json(newUser);
   } catch (error) {
     console.log(error);
   }
@@ -52,12 +85,13 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await Newuser.findOne({ email });
     if (!user) {
       return res.json({ error: "帳號不存在" });
     }
 
     const passwordMatch = await comparePassword(password, user.password);
+    
     if (passwordMatch) {
       jwt.sign(
         { email: user.email, id: user._id, username: user.username },
@@ -93,6 +127,49 @@ export const loginUser = async (req, res) => {
     console.log(error);
   }
 };
+
+
+// export const loginUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(400).json({ error: "帳號不存在" });
+//     }
+
+//     const passwordMatch = await comparePassword(password, user.password);
+//     if (!passwordMatch) {
+//       return res.status(400).json({ error: "登入失敗! 帳號密碼有誤" });
+//     }
+
+//     jwt.sign(
+//       { email: user.email, id: user._id, username: user.username },
+//       process.env.JWT_SECRET,
+//       {},
+//       (err, token) => {
+//         if (err) throw err;
+
+//         res.cookie("token", token, {
+//           httpOnly: true,
+//           secure: process.env.NODE_ENV === "production",
+//           sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+//         }).json({
+//           message: "成功登入",
+//           user: {
+//             email: user.email,
+//             id: user._id,
+//             username: user.username,
+//           },
+//         });
+//       }
+//     );
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ error: "伺服器錯誤，請稍後再試" });
+//   }
+// };
+
 
 // Get Profile Endpoint
 export const getProfile = (req, res) => {
@@ -135,7 +212,7 @@ export const editProfile = async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(
       { email: email }, // 根據 email 找到使用者
-      { username, name, tel, isTourist:convertedIsTourist, isGuide }, // 更新欄位
+      { username, name, tel, isTourist: convertedIsTourist, isGuide }, // 更新欄位
       { new: true, runValidators: true } // 回傳更新後的資料
     );
 
@@ -164,113 +241,99 @@ export const editProfile = async (req, res) => {
   }
 };
 
-
-export const getTourguideProfile = async(req, res) => {
+export const getTourguideProfile = async (req, res) => {
   try {
     const tourguides = await Tourguide.find();
     res.json(tourguides);
   } catch (error) {
-    res.status(500).json({ message: "伺服器錯誤", error })
+    res.status(500).json({ message: "伺服器錯誤", error });
   }
-}
+};
 
-export const getCommentaries = async(req, res) => {
+export const getCommentaries = async (req, res) => {
   try {
-    
     const commentaries = await Commentaries.find();
     res.json(commentaries);
   } catch (error) {
-    res.status(500).json({ message: "伺服器錯誤", error })
+    res.status(500).json({ message: "伺服器錯誤", error });
   }
-}
+};
 
-export const getTourguideInfo= async(req, res) => {
+export const getTourguideInfo = async (req, res) => {
   try {
-    
     // const tourguideInfo = await TourguideInfo.findOne( {id:1} );
 
-     const tourguideInfo = await TourguideInfo.find( {} );
+    const tourguideInfo = await TourguideInfo.find({});
     // const {id} = req.params;
-    
-    if(!tourguideInfo) {
-      return res.status(404).json({ message: "導遊資料未找到" });
 
+    if (!tourguideInfo) {
+      return res.status(404).json({ message: "導遊資料未找到" });
     }
     // res.json(tourguideInfo.profile);
     // console.log(tourguideInfo.profile)
     res.status(200).json({ success: true, data: tourguideInfo });
-
   } catch (error) {
-    res.status(500).json({ message: "伺服器錯誤", error })
+    res.status(500).json({ message: "伺服器錯誤", error });
   }
-}
+};
 
-export const getTrips = async(req, res) => {
+export const getTrips = async (req, res) => {
   try {
-    
     const trips = await Trips.find();
     res.json(trips);
   } catch (error) {
-    res.status(500).json({ message: "伺服器錯誤", error })
+    res.status(500).json({ message: "伺服器錯誤", error });
   }
-}
+};
 
-export const getTourguideInfoById = async(req, res)=> {
-
-try {
-  const {id} = req.params;
-  console.log("🔍 查詢導遊 ID:", id); // 確保有拿到 id
-
-  if (!id) {
-    return res.status(400).json({ message: "請提供有效的導遊 ID" });
-  }
-
-
-  const tourguideById = await TourguideInfo.findOne( {id} );
- 
-
- if (!tourguideById) {
-  return res.status(404).json({ message: "導遊資料未找到", error });
- }
- return res.json(tourguideById);
-} catch (error) {
-  console.error("❌ 查詢導遊資料失敗:", error);
-
-  if (!res.headersSent) {
-    return res.status(500).json({ message: "伺服器錯誤", error: error.message });
-  }
-
-}
-
-}
-
-export const getTours = async(req, res) => {
+export const getTourguideInfoById = async (req, res) => {
   try {
-    
+    const { id } = req.params;
+    console.log("🔍 查詢導遊 ID:", id); // 確保有拿到 id
+
+    if (!id) {
+      return res.status(400).json({ message: "請提供有效的導遊 ID" });
+    }
+
+    const tourguideById = await TourguideInfo.findOne({ id });
+
+    if (!tourguideById) {
+      return res.status(404).json({ message: "導遊資料未找到", error });
+    }
+    return res.json(tourguideById);
+  } catch (error) {
+    console.error("❌ 查詢導遊資料失敗:", error);
+
+    if (!res.headersSent) {
+      return res
+        .status(500)
+        .json({ message: "伺服器錯誤", error: error.message });
+    }
+  }
+};
+
+export const getTours = async (req, res) => {
+  try {
     const tours = await Tours.find();
     res.json(tours);
   } catch (error) {
-    res.status(500).json({ message: "伺服器錯誤", error })
+    res.status(500).json({ message: "伺服器錯誤", error });
   }
-}
+};
 
-
-export const getSites = async(req, res) => {
+export const getSites = async (req, res) => {
   try {
-    
     const sites = await Sites.find();
     res.json(sites);
   } catch (error) {
-    res.status(500).json({ message: "伺服器錯誤", error })
+    res.status(500).json({ message: "伺服器錯誤", error });
   }
-}
+};
 
-
-//   let { tourguideId, message} = req.body; 
-
+//   let { tourguideId, message} = req.body;
 
 //   export const sendMessages = async(req, res) => {
-//   let { tourguideId, message} = req.body; 
+//   let { tourguideId, message} = req.body;
 
 // const db = client.db()
 
@@ -278,17 +341,13 @@ export const getSites = async(req, res) => {
 // //     return res.status(400).json({error: "請提供導遊 ID 和留言內容"})
 // //   }
 
-
 // // try {
-
 
 // //   if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
 // //     return res.status(400).json({ error: "無效的導遊 ID" });
 // //   }
 
-
 //   // const newMessage = new Message({tourguideId, message});
-
 
 // //   res.json({ success: true, message: "留言已儲存！" });
 
@@ -307,8 +366,6 @@ export const getSites = async(req, res) => {
 //   res.status(500).json({ error: "伺服器錯誤", details: error.message });
 // }
 
-
-
 // }
 
 // const db = client.db()
@@ -317,17 +374,13 @@ export const getSites = async(req, res) => {
 // //     return res.status(400).json({error: "請提供導遊 ID 和留言內容"})
 // //   }
 
-
 // // try {
-
 
 // //   if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
 // //     return res.status(400).json({ error: "無效的導遊 ID" });
 // //   }
 
-
 //   // const newMessage = new Message({tourguideId, message});
-
 
 // //   res.json({ success: true, message: "留言已儲存！" });
 
@@ -346,11 +399,7 @@ export const getSites = async(req, res) => {
 //   res.status(500).json({ error: "伺服器錯誤", details: error.message });
 // }
 
-
-
 // }
-
-
 
 // export const sendMessages = async (req, res) => {
 //   let { tourguideId, message } = req.body;
@@ -416,7 +465,6 @@ export const getSites = async(req, res) => {
 //   }
 // };
 
-
 // export const sendMessages = async (req, res) => {
 //   let { tourguideName, name, email, message } = req.body;
 
@@ -477,9 +525,66 @@ export const sendMessages = async (req, res) => {
       await newMessage.save();
       return res.json({ success: true, message: "留言已儲存！" });
     }
-
   } catch (error) {
     console.error("留言儲存失敗", error);
     res.status(500).json({ error: "伺服器錯誤", details: error.message });
   }
+};
+
+export const sendPrivateOrders = async (req, res) => {
+  const { privateOrders } = req.body;
+
+
+  try {
+    const savePrivtateOrders = await Promise.all(
+      privateOrders.map((privateOrdersData) => {
+        const newPrivateOrders = new PrivateOrders(privateOrdersData);
+        return newPrivateOrders.save();
+      })
+    );
+    return res.status(201).json({
+      success: true,
+      message: "所有訂單已成功傳送到資料庫！",
+      privateOrders: savePrivtateOrders,
+    });
+  } catch (error) {
+    console.error("訂單傳送失敗", error);
+    res.status(500).json({ error: "伺服器錯誤", details: error.message });
+  }
+};
+
+
+export const getPrivateOrdersByUsername = async (req, res) => {
+   try {
+     const { userName } = req.params;
+     console.log("🔍 username:", userName); // 確保有拿到 username
+
+     if (!userName) {
+      return res.status(400).json({ message: "請提供有效的userName" });
+    }
+
+     const privateOrdersByUsername = await PrivateOrders.find({ userName });
+
+
+     if (!privateOrdersByUsername || privateOrdersByUsername.length === 0) {
+      return res.status(404).json({ message: "訂單資料未找到" });
+    }
+
+  //    if (!PrivateOrders) {
+  //     return res.status(404).json({ message: "訂單資料未找到", error });
+  //  }
+
+
+   return res.json(privateOrdersByUsername);
+   } catch (error) {
+     console.error("❌ 查詢訂單資料失敗:", error);
+
+     if (!res.headersSent) {
+       return res
+         .status(500)
+         .json({ message: "伺服器錯誤", error: error.message });
+     }
+   }
+  
+ 
 };

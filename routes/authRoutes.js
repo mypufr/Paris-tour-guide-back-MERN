@@ -3,7 +3,9 @@ import cors from "cors";
 import { test, registerUser, loginUser, getProfile, logoutUser, editProfile, 
   getTourguideProfile, getCommentaries, getTourguideInfo, getTrips, getTourguideInfoById, getTours, getSites,
 
-  sendMessages
+  sendMessages,
+  sendPrivateOrders,
+  getPrivateOrdersByUsername
 
 } from "../controllers/authController.js";
 
@@ -35,6 +37,8 @@ router.get('/sites', getSites)
 
 
 router.post('/messages', sendMessages)
-            
+router.post('/:username/private-orders', sendPrivateOrders)
+router.get('/:userName/private-orders', getPrivateOrdersByUsername)
+
 
 export default router;
