@@ -20,36 +20,6 @@ export const test = (req, res) => {
 };
 
 // Signup Endpoint
-// export const registerUser = async (req, res) => {
-//   try {
-//     const { username, email, password } = req.body;
-
-//     if (!email) {
-//       return res.json("請輸入有效的帳號");
-//     }
-
-//     const exist = await User.findOne({ email });
-//     if (exist) {
-//       return res.json("此帳號已存在");
-//     }
-
-//     if (!password || password.length < 8) {
-//       return res.json({ error: "請輸入包含8個字母或數字的有效密碼" });
-//     }
-
-//     const hashedPassword = await hashPassword(password);
-
-//     const user = await User.create({
-//       username,
-//       email,
-//       password: hashedPassword,
-//     });
-//     return res.json(user);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 export const registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -330,174 +300,6 @@ export const getSites = async (req, res) => {
   }
 };
 
-//   let { tourguideId, message} = req.body;
-
-//   export const sendMessages = async(req, res) => {
-//   let { tourguideId, message} = req.body;
-
-// const db = client.db()
-
-// //   if (!tourguideId || !message) {
-// //     return res.status(400).json({error: "請提供導遊 ID 和留言內容"})
-// //   }
-
-// // try {
-
-// //   if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
-// //     return res.status(400).json({ error: "無效的導遊 ID" });
-// //   }
-
-//   // const newMessage = new Message({tourguideId, message});
-
-// //   res.json({ success: true, message: "留言已儲存！" });
-
-// // } catch (error) {
-// //   console.error("留言儲存失敗", error);
-// //   res.status(500).json({ error: "伺服器錯誤", details: error.message });
-// // }
-
-// try {
-
-//   const newMessage = new Message({tourguideId, message});
-//   const res = await db.Collection('message').insertOne(newMessage)
-//   newMessage= res.insertedId;
-// } catch (error) {
-
-//   res.status(500).json({ error: "伺服器錯誤", details: error.message });
-// }
-
-// }
-
-// const db = client.db()
-
-// //   if (!tourguideId || !message) {
-// //     return res.status(400).json({error: "請提供導遊 ID 和留言內容"})
-// //   }
-
-// // try {
-
-// //   if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
-// //     return res.status(400).json({ error: "無效的導遊 ID" });
-// //   }
-
-//   // const newMessage = new Message({tourguideId, message});
-
-// //   res.json({ success: true, message: "留言已儲存！" });
-
-// // } catch (error) {
-// //   console.error("留言儲存失敗", error);
-// //   res.status(500).json({ error: "伺服器錯誤", details: error.message });
-// // }
-
-// try {
-
-//   const newMessage = new Message({tourguideId, message});
-//   const res = await db.Collection('message').insertOne(newMessage)
-//   newMessage= res.insertedId;
-// } catch (error) {
-
-//   res.status(500).json({ error: "伺服器錯誤", details: error.message });
-// }
-
-// }
-
-// export const sendMessages = async (req, res) => {
-//   let { tourguideId, message } = req.body;
-
-//   if (!tourguideId || !message) {
-//     return res.status(400).json({ error: "請提供導遊 ID 和留言內容" });
-//   }
-
-//   try {
-//     // ✅ 確保 tourguideId 是 ObjectId
-//     if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
-//       return res.status(400).json({ error: "無效的導遊 ID" });
-//     }
-
-//     // ✅ 使用 Mongoose Model 來存資料
-//     const newMessage = new Message({
-//       tourguideId: new mongoose.Types.ObjectId(tourguideId),
-//       message,
-//     });
-
-//     await newMessage.save(); // ✅ 正確儲存
-
-//     res.json({ success: true, message: "留言已儲存！" });
-
-//   } catch (error) {
-//     console.error("留言儲存失敗", error);
-//     res.status(500).json({ error: "伺服器錯誤", details: error.message });
-//   }
-// };
-
-// export const sendMessages = async (req, res) => {
-//   let { tourguideId, name, email, message } = req.body;
-
-//   if (!tourguideId || !name || !email || !message) {
-//     return res.status(400).json({ error: "請提供完整資訊" });
-//   }
-
-//   try {
-//     if (!mongoose.Types.ObjectId.isValid(tourguideId)) {
-//       return res.status(400).json({ error: "無效的導遊 ID" });
-//     }
-
-//     // 檢查 Email 是否已存在
-//     const existingMessage = await Message.findOne({ email });
-//     if (existingMessage) {
-//       return res.status(400).json({ error: "該 Email 已經留言過" });
-//     }
-
-//     const newMessage = new Message({
-//       tourguideName: new mongooseName.(tourguideId),
-//       name,
-//       email,
-//       message,
-//     });
-
-//     await newMessage.save();
-
-//     res.json({ success: true, message: "留言已儲存！" });
-
-//   } catch (error) {
-//     console.error("留言儲存失敗", error);
-//     res.status(500).json({ error: "伺服器錯誤", details: error.message });
-//   }
-// };
-
-// export const sendMessages = async (req, res) => {
-//   let { tourguideName, name, email, message } = req.body;
-
-//   // 確保所有欄位都有填寫
-//   if (!tourguideName || !name || !email || !message) {
-//     return res.status(400).json({ error: "請提供完整資訊" });
-//   }
-
-//   try {
-//     // 檢查 Email 是否已經留言過
-//     const existingMessage = await Message.findOne({ email, tourguideName });
-//     if (existingMessage) {
-//       return res.status(400).json({ error: "該 Email 已經留言過此導遊" });
-//     }
-
-//     // 建立新留言
-//     const newMessage = new Message({
-//       tourguideName, // ✅ 使用導遊名字而不是 ID
-//       name,
-//       email,
-//       message,
-//     });
-
-//     // 儲存到資料庫
-//     await newMessage.save();
-
-//     res.json({ success: true, message: "留言已儲存！" });
-
-//   } catch (error) {
-//     console.error("留言儲存失敗", error);
-//     res.status(500).json({ error: "伺服器錯誤", details: error.message });
-//   }
-// };
 
 export const sendMessages = async (req, res) => {
   let { tourguideName, senderName, email, message } = req.body;
@@ -563,16 +365,14 @@ export const getPrivateOrdersByUsername = async (req, res) => {
       return res.status(400).json({ message: "請提供有效的userName" });
     }
 
-     const privateOrdersByUsername = await PrivateOrders.find({ userName });
+     const privateOrdersByUsername = await PrivateOrders.find({ userName }).sort({ createdAt: -1});
 
 
      if (!privateOrdersByUsername || privateOrdersByUsername.length === 0) {
       return res.status(404).json({ message: "訂單資料未找到" });
     }
 
-  //    if (!PrivateOrders) {
-  //     return res.status(404).json({ message: "訂單資料未找到", error });
-  //  }
+
 
 
    return res.json(privateOrdersByUsername);
