@@ -12,6 +12,7 @@ import Sites from "../models/singleSites.js";
 import Message from "../models/Message.js";
 import PrivateOrders from "../models/PrivateOrder.js";
 
+
 import { hashPassword, comparePassword } from "../helpers/auth.js";
 import jwt from "jsonwebtoken";
 
@@ -385,6 +386,39 @@ export const getPrivateOrdersByUsername = async (req, res) => {
          .json({ message: "伺服器錯誤", error: error.message });
      }
    }
-  
- 
+
+};
+
+export const getPopularTourguides = async(req, res) => {
+  try {
+    // 查詢所有 isPopular 為 true 的導遊
+    const popularGuides = await TourguideInfo.find({ isPopular: true });
+    if (!popularGuides || popularGuides.length === 0) {
+      return res.status(404).json({ message: "找不到熱門導遊" });
+    }
+    res.json(popularGuides);
+  } catch (error) {
+    console.error("查詢熱門導遊失敗:", error);
+    res.status(500).json({ message: "伺服器錯誤", error: error.message });
+
+
+}};
+
+export const getTourguidesByDistrict = async (req, res) => {
+  try {
+    const { district } = req.params; // 假設 district 傳入的是 "1"、"2" 等字串
+    if (!district) {
+      return res.status(400).json({ message: "請提供有效的區域" });
+    }
+
+    // 查詢所有 districts 陣列中包含 district 的導遊
+    const guides = await TourguideInfo.find({ districts: district });
+    if (!guides || guides.length === 0) {
+      return res.status(404).json({ message: "找不到該區域的導遊" });
+    }
+    res.json(guides);
+  } catch (error) {
+    console.error("查詢導遊失敗:", error);
+    res.status(500).json({ message: "伺服器錯誤", error: error.message });
+  }
 };

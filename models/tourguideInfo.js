@@ -7,7 +7,8 @@ const TourguideInfoSchema = new mongoose.Schema({
   profile: { type: String, required: true },
   themes: [{ type: String, required: true }], // 陣列
   languages: [{ type: String, required: true }], // 陣列
-  districts: [{ type: String, required: true }], // 陣列
+  districts: { type: [String], required: true }, // 陣列
+
   trips: [
     {
       id: { type: Number, required: true, unique: true },
@@ -37,7 +38,8 @@ const TourguideInfoSchema = new mongoose.Schema({
   ],
   price_adult: {type: Number, required: true},
   price_child: {type: Number, required: true},
-  imgUrl:{ type: String, required: true }
+  imgUrl:{ type: String, required: true },
+  isPopular: { type: Boolean, default: false }
 });
 
 

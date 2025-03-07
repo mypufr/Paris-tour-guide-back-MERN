@@ -16,9 +16,9 @@ const TourguideSchema = new Schema({
   speciality3: String,
   id: String,
   price: String,
-
+  isPopular: { type: Boolean, default: false }
 });
 
-const Tourguide = mongoose.model("Tourguide", TourguideSchema, "tourguide-profile");
+const CompleteTourguideProfile = mongoose.model("CompleteTourguideProfile", TourguideSchema, "tourguide-profile-test");
 
-export default Tourguide;
+export default CompleteTourguideProfile;

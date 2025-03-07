@@ -5,7 +5,9 @@ import { test, registerUser, loginUser, getProfile, logoutUser, editProfile,
 
   sendMessages,
   sendPrivateOrders,
-  getPrivateOrdersByUsername
+  getPrivateOrdersByUsername,
+  getPopularTourguides,
+  getTourguidesByDistrict
 
 } from "../controllers/authController.js";
 
@@ -39,6 +41,11 @@ router.get('/sites', getSites)
 router.post('/messages', sendMessages)
 router.post('/:username/private-orders', sendPrivateOrders)
 router.get('/:userName/private-orders', getPrivateOrdersByUsername)
+
+
+router.get('/popular-tourguides', getPopularTourguides);
+
+router.get('/district/:district', getTourguidesByDistrict);
 
 
 export default router;
