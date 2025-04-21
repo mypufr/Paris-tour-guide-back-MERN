@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://paris-mon-guide.onrender.com/", 
+  "https://paris-mon-guide.onrender.com", 
 ];
 
 
@@ -36,6 +36,9 @@ app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 
 app.use("/api", authRoutes)
+app.get("/", (req, res) => {
+  res.status(200).send("Backend is running successfully 🎉");
+});
 
  
 // app.use(router);
