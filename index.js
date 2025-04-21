@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://paris-tour-guide-front.onrender.com", 
+  "https://paris-mon-guide.onrender.com/", 
 ];
 
 
