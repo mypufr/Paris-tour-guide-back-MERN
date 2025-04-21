@@ -7,7 +7,8 @@ import { test, registerUser, loginUser, getProfile, logoutUser, editProfile,
   sendPrivateOrders,
   getPrivateOrdersByUsername,
   getPopularTourguides,
-  getTourguidesByDistrict
+  getTourguidesByDistrict,
+  getSelectedGuidesByTheme
 
 } from "../controllers/authController.js";
 
@@ -47,5 +48,6 @@ router.get('/popular-tourguides', getPopularTourguides);
 
 router.get('/district/:district', getTourguidesByDistrict);
 
+router.get('/guides', getSelectedGuidesByTheme)
 
 export default router;

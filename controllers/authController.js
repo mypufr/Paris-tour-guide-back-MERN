@@ -13,6 +13,7 @@ import Message from "../models/Message.js";
 import PrivateOrders from "../models/PrivateOrder.js";
 
 
+
 import { hashPassword, comparePassword } from "../helpers/auth.js";
 import jwt from "jsonwebtoken";
 
@@ -269,7 +270,7 @@ export const getTourguideInfoById = async (req, res) => {
     const tourguideById = await TourguideInfo.findOne({ id });
 
     if (!tourguideById) {
-      return res.status(404).json({ message: "導遊資料未找到", error });
+      return res.status(404).json({ message: "導遊資料未找到" });
     }
     return res.json(tourguideById);
   } catch (error) {
@@ -422,3 +423,31 @@ export const getTourguidesByDistrict = async (req, res) => {
     res.status(500).json({ message: "伺服器錯誤", error: error.message });
   }
 };
+
+
+export const getSelectedGuidesByTheme = async(req, res) => {
+  try {
+
+    const {theme} = req.query;
+console.log(theme);
+
+
+    if(!theme) {
+      return res.status(400).json({ message: "請選擇行程主題" });
+    }
+
+    // 在 MongoDB 中查找符合條件的導遊
+    const selectedGuides = await TourguideInfo.find({ themes: theme });
+
+
+    if (!TourguideInfo.length) {
+      return res.status(404).json({ message: "未找到符合主題的導遊" });
+    }
+
+    res.json(selectedGuides);
+    
+  } catch (error) {
+    console.error("❌ 獲取導遊失敗:", error);
+    res.status(500).json({ message: "伺服器錯誤", error: error.message });
+  }
+}

@@ -18,9 +18,15 @@ mongoose.connect(process.env.MONGO_URL)
 
 // middleware : parse req.body for express
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://paris-tour-guide-front.onrender.com", 
+];
+
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // 前端網址
+    origin: allowedOrigins,
     credentials: true, // 允許前端攜帶 cookie
   })
 );
