@@ -14,7 +14,7 @@ const app = express();
 //database connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>console.log('Database connected'))
-.catch((err)=>console.log('Database not connected, err'))
+.catch((err)=>console.log('Database not connected', err))
 
 // middleware : parse req.body for express
 
@@ -41,5 +41,5 @@ app.use("/api", authRoutes)
 // app.use(router);
 
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 app.listen(port, ()=> console.log(`Server is running on port ${port}`))
