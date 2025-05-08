@@ -6,6 +6,7 @@ import Newuser from "../models/Newuser.js";
 import Tourguide from "../models/tourguideProfile.js";
 import Commentaries from "../models/commentaries.js";
 import TourguideInfo from "../models/tourguideInfo.js";
+import TourguideInfoTrans from "../models/tourguideInfoTrans.js";
 import Trips from "../models/trips.js";
 import Tours from "../models/tours.js";
 import Sites from "../models/singleSites.js";
@@ -235,7 +236,7 @@ export const getTourguideInfo = async (req, res) => {
   try {
     // const tourguideInfo = await TourguideInfo.findOne( {id:1} );
 
-    const tourguideInfo = await TourguideInfo.find({});
+    const tourguideInfo = await TourguideInfoTrans.find({});
     // const {id} = req.params;
 
     if (!tourguideInfo) {
